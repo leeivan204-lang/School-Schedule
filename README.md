@@ -40,6 +40,13 @@ python --version
 
 ## 部署流程 (GitHub Pages)
 
+### 前置設定 (必讀)
+在第一次部署之前，必須先設定 GitHub Pages 的來源：
+1. 進入 GitHub Repository 的 **Settings** (設定)。
+2. 在左側選單點選 **Pages**。
+3. 在 **Build and deployment** > **Source** 下拉選單中，選擇 **GitHub Actions**。
+
+### 自動部署
 本專案已設定 GitHub Actions 自動部署流程。
 
 1. 將程式碼推送至 GitHub 的 `main` 分支。
