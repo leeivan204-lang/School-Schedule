@@ -1,0 +1,458 @@
+:root {
+    --primary-color: #2c5f4f;
+    --primary-hover: #234a3d;
+    --bg-color: #f5f3f0;
+    --card-bg: #ffffff;
+    --text-main: #3a3a3a;
+    --text-secondary: #6b6b6b;
+    --border-color: #000000;
+    --accent-color: #d4a574;
+
+    /* Event Colors */
+    --exam-bg: #86efac;
+    --trip-bg: #93c5fd;
+    --bday-bg: #fde047;
+    --holiday-bg: #fbcfe8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: linear-gradient(135deg, #f5f3f0 0%, #e8e4df 100%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        repeating-linear-gradient(90deg, rgba(212, 165, 116, 0.03) 0px, transparent 1px, transparent 40px, rgba(212, 165, 116, 0.03) 41px),
+        repeating-linear-gradient(0deg, rgba(212, 165, 116, 0.03) 0px, transparent 1px, transparent 40px, rgba(212, 165, 116, 0.03) 41px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1200px;
+    background: var(--card-bg);
+    box-shadow: 0 8px 32px rgba(44, 95, 79, 0.1);
+    display: flex;
+    flex-direction: column;
+    border-radius: 2px;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+}
+
+header {
+    background: linear-gradient(to bottom, #ffffff 0%, #fafaf8 100%);
+    color: var(--text-main);
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.title-input {
+    font-size: 1.8rem;
+    font-weight: 700;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    width: 80px;
+    text-align: center;
+    font-family: inherit;
+    color: inherit;
+    background: transparent;
+}
+
+.title-input:focus {
+    outline: none;
+    border-bottom-color: var(--primary-color);
+}
+
+.semester-input {
+    width: 50px;
+}
+
+.title-icon {
+    font-size: 2rem;
+    margin: 0 8px;
+    animation: gentle-bounce 2s ease-in-out infinite;
+}
+
+@keyframes gentle-bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.settings-section,
+.input-section {
+    padding: 15px 20px;
+    background: linear-gradient(to bottom, #fafaf8 0%, #ffffff 100%);
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(212, 165, 116, 0.3);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.input-group input[type="date"],
+.input-group input[type="text"],
+.input-group input[type="month"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.checkbox-label {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.view-switcher {
+    display: flex;
+    gap: 15px;
+    background: rgba(212, 165, 116, 0.1);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 165, 116, 0.2);
+}
+
+.view-switcher label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 38px;
+}
+
+.schedule-section {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.table-container {
+    border: 2px solid #000;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th,
+td {
+    border: 1px solid #000;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+thead th {
+    background-color: #fff;
+    font-weight: 700;
+}
+
+.th-month {
+    width: 40px;
+}
+
+.th-week {
+    width: 40px;
+}
+
+.th-events {
+    width: 40%;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.th-notes {
+    width: 15%;
+}
+
+.cell-month {
+    writing-mode: vertical-lr;
+    font-weight: bold;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+.month-num {
+    text-combine-upright: all;
+    -webkit-text-combine: horizontal;
+}
+
+.cell-week {
+    font-weight: bold;
+}
+
+.cell-day {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+    padding: 0 !important;
+    /* Ensure bars go edge to edge */
+}
+
+.event-bar-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding-bottom: 2px;
+}
+
+.event-bar {
+    height: 4px;
+    width: 100%;
+    background-color: var(--accent-color);
+    /* Default color for non-keyword events */
+}
+
+.event-bar.start {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    margin-left: 2px;
+    width: calc(100% - 2px);
+}
+
+.event-bar.end {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    margin-right: 2px;
+    width: calc(100% - 2px);
+}
+
+.event-bar.start.end {
+    width: calc(100% - 4px);
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.cell-events {
+    text-align: left;
+    vertical-align: top;
+    padding: 5px;
+}
+
+.cell-notes {
+    text-align: left;
+    vertical-align: top;
+    font-size: 0.9rem;
+}
+
+.event-block {
+    margin-bottom: 4px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.event-date-prefix {
+    font-weight: bold;
+    margin-right: 5px;
+    white-space: nowrap;
+    /* Prevent breaking 23-26 */
+}
+
+.event-exam {
+    background-color: var(--exam-bg);
+}
+
+.event-trip {
+    background-color: var(--trip-bg);
+}
+
+.event-birthday {
+    background-color: var(--bday-bg);
+}
+
+.event-holiday {
+    background-color: var(--holiday-bg);
+}
+
+.teacher-only-mark {
+    font-size: 0.8em;
+    color: #ef4444;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.is-weekend {
+    color: #dc2626;
+}
+
+td.event-exam {
+    background-color: var(--exam-bg);
+}
+
+td.event-trip {
+    background-color: var(--trip-bg);
+}
+
+td.event-birthday {
+    background-color: var(--bday-bg);
+}
+
+td.event-holiday {
+    background-color: var(--holiday-bg);
+}
+
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 5mm;
+    }
+
+    body {
+        padding: 0;
+        background: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 10pt;
+    }
+
+    body::before {
+        display: none;
+    }
+
+    .input-section,
+    .settings-section {
+        display: none !important;
+    }
+
+    header {
+        padding: 5px 0;
+        border-bottom: 1px solid #000;
+        text-align: center;
+    }
+
+    header p {
+        display: none;
+    }
+
+    .title-container {
+        margin-bottom: 0;
+        justify-content: center;
+    }
+
+    .title-input {
+        border-bottom: none;
+        width: auto;
+        text-align: center;
+        font-size: 1.4rem;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .app-container {
+        box-shadow: none;
+        max-width: 100%;
+        width: 100%;
+        border: none;
+    }
+
+    .schedule-section {
+        padding: 10px 5px;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tr {
+        break-inside: avoid;
+    }
+
+    .th-month,
+    .th-week {
+        width: 30px;
+    }
+
+    .cell-day {
+        width: 25px;
+        height: 25px;
+        font-size: 0.8rem;
+    }
+
+    .th-events {
+        width: 35%;
+    }
+
+    .th-notes {
+        width: 15%;
+    }
+
+    .event-block {
+        font-size: 0.85rem;
+        padding: 1px 4px;
+    }
+}

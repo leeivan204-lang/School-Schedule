@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學期行事曆</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Outfit:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <div class="title-container">
+                <span class="title-icon">✨</span>
+                <input type="number" id="title-year" class="title-input" placeholder="114" value="114" min="100"
+                    max="999">
+                <span>年第</span>
+                <input type="number" id="title-semester" class="title-input semester-input" placeholder="1" value="1"
+                    min="1" max="2">
+                <span>學期特教班行事曆</span>
+                <span class="title-icon">✨</span>
+            </div>
+            <p>輸入日期與事項，自動產生彩色行事曆</p>
+        </header>
+
+        <section class="settings-section">
+            <div class="input-group">
+                <label for="semester-start">學期開始日期 (第一週的星期日)</label>
+                <input type="date" id="semester-start">
+            </div>
+            <div class="input-group"
+                style="margin-left: auto; display: flex; flex-direction: row; align-items: center; gap: 15px;">
+                <div class="view-switcher">
+                    <label><input type="radio" name="view-mode" value="teacher" checked> 教師版</label>
+                    <label><input type="radio" name="view-mode" value="parent"> 家長版</label>
+                </div>
+                <button id="print-btn">匯出 PDF / 列印</button>
+            </div>
+        </section>
+
+        <section class="input-section">
+            <div class="input-group">
+                <h3>新增事項</h3>
+                <label for="event-date">開始日期</label>
+                <input type="date" id="event-date">
+                <label for="event-end-date">結束日期 (選填)</label>
+                <input type="date" id="event-end-date">
+                <label for="event-desc">事項內容</label>
+                <input type="text" id="event-desc" placeholder="例如：第一次段考...">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="teacher-only"> 僅限教師 (家長版不顯示)
+                </label>
+                <button id="add-btn">新增事項</button>
+            </div>
+
+            <div class="input-group" style="border-left: 1px solid #ccc; padding-left: 20px;">
+                <h3>新增月份備註</h3>
+                <label for="note-month">月份</label>
+                <input type="month" id="note-month">
+                <label for="note-content">備註內容</label>
+                <input type="text" id="note-content" placeholder="例如：孔子誕辰紀念日...">
+                <button id="add-note-btn">新增備註</button>
+            </div>
+        </section>
+
+        <section class="schedule-section">
+            <div class="table-container">
+                <table id="schedule-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="th-month">月份</th>
+                            <th rowspan="2" class="th-week">週次</th>
+                            <th colspan="7" class="th-days">星期</th>
+                            <th rowspan="2" class="th-events">重要事項</th>
+                            <th rowspan="2" class="th-notes">備註</th>
+                        </tr>
+                        <tr class="sub-header">
+                            <th>日</th>
+                            <th>一</th>
+                            <th>二</th>
+                            <th>三</th>
+                            <th>四</th>
+                            <th>五</th>
+                            <th>六</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule-body">
+                        <!-- Rows will be generated here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js?v=2"></script>
+</body>
+
+</html>
