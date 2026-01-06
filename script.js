@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getEventClass(desc) {
         if (desc.includes('段考')) return 'event-exam';
         if (desc.includes('校外教學')) return 'event-trip';
-        if (desc.includes('慶生會')) return 'event-birthday';
+        if (desc.includes('慶生會') || desc.includes('同樂會') || desc.includes('歡送會')) return 'event-birthday';
         if (desc.includes('節日') || desc.includes('補假') || desc.includes('放假')) return 'event-holiday';
         return '';
     }
