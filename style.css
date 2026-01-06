@@ -183,6 +183,11 @@ button {
     height: 38px;
 }
 
+.btn-secondary {
+    background-color: var(--accent-color);
+    color: var(--text-main);
+}
+
 .schedule-section {
     padding: 20px;
     overflow-x: auto;
