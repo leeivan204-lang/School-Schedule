@@ -370,8 +370,14 @@ td.event-holiday {
 @media print {
     @page {
         size: A4 portrait;
-        margin: 3mm;
-        /* 縮減紙張邊界 */
+        margin: 4mm;
+    }
+
+    /* 解決滑動桿與排版被強制裁切的問題 */
+    html,
+    body {
+        height: 100%;
+        overflow: visible !important;
     }
 
     body {
@@ -379,8 +385,8 @@ td.event-holiday {
         background: white;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
-        font-size: 8.5pt;
-        /* 縮小基礎字體 */
+        font-size: 8pt;
+        /* 縮小基礎字體確保不會超出單頁 */
     }
 
     body::before {
@@ -394,7 +400,6 @@ td.event-holiday {
 
     header {
         padding: 2px 0;
-        /* 縮減 header 內距 */
         border-bottom: 1px solid #000;
         text-align: center;
     }
@@ -405,7 +410,6 @@ td.event-holiday {
 
     .title-container {
         margin-bottom: 2px;
-        /* 縮減標題下方空間 */
         justify-content: center;
     }
 
@@ -413,8 +417,7 @@ td.event-holiday {
         border-bottom: none;
         width: auto;
         text-align: center;
-        font-size: 1.2rem;
-        /* 縮小標題字體 */
+        font-size: 1.1rem;
     }
 
     input[type=number]::-webkit-inner-spin-button,
@@ -423,16 +426,29 @@ td.event-holiday {
         margin: 0;
     }
 
+    /* 解除原有 overflow-x 帶來的捲動條與截斷 */
     .app-container {
         box-shadow: none;
         max-width: 100%;
         width: 100%;
         border: none;
+        overflow: visible !important;
     }
 
+    /* 解除原有 overflow-x 帶來的捲動條與截斷 */
     .schedule-section {
-        padding: 0px 0px;
-        /* 移除額外內距 */
+        padding: 0px;
+        overflow: visible !important;
+    }
+
+    .table-container {
+        border: 2px solid #000;
+        overflow: visible !important;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
     }
 
     thead {
@@ -441,8 +457,10 @@ td.event-holiday {
 
     th,
     td {
-        padding: 1px 2px;
+        padding: 1px;
         /* 極大化壓縮儲存格內距 */
+        line-height: 1.1;
+        /* 緊湊行高，保證塞進 A4 */
     }
 
     tr {
@@ -452,22 +470,18 @@ td.event-holiday {
     .th-month,
     .th-week {
         width: 25px;
-        /* 進一步縮減月份與週次欄寬 */
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 
     .cell-day {
         width: 20px;
-        /* 縮小日期格子寬度 */
-        height: 20px;
-        /* 縮小日期格子高度 */
+        height: 18px;
+        /* 再稍微降低日期格子高度 */
         font-size: 0.75rem;
-        /* 縮小日期字體 */
     }
 
     .th-events {
         width: 45%;
-        /* 調整事件欄位佔比 */
     }
 
     .th-notes {
@@ -475,13 +489,10 @@ td.event-holiday {
     }
 
     .event-block {
-        font-size: 0.75rem;
-        /* 縮小事件字體 */
+        font-size: 7.5pt;
         padding: 1px 2px;
-        /* 壓縮事件方塊內距 */
-        margin-bottom: 1px;
-        /* 縮減事件間的距離 */
-        line-height: 1.2;
-        /* 縮小行高 */
+        margin-bottom: 0px;
+        /* 移除各事件區塊間不必要的額外高度 */
+        line-height: 1.1;
     }
 }
