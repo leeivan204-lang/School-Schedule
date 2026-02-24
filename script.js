@@ -438,12 +438,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         dayCell.title = singleDayEvents.map(e => e.desc).join('\n');
                     }
 
-                    // Render bars ONLY for multi-day events
-                    if (multiDayEvents.length > 0) {
+                    // Render bars ONLY for multi-day events with specific colors
+                    const coloredMultiDayEvents = multiDayEvents.filter(e => getEventClass(e.desc) !== '');
+
+                    if (coloredMultiDayEvents.length > 0) {
                         const barContainer = document.createElement('div');
                         barContainer.className = 'event-bar-container';
 
-                        multiDayEvents.forEach(e => {
+                        coloredMultiDayEvents.forEach(e => {
                             const bar = document.createElement('div');
                             let cls = 'event-bar ' + getEventClass(e.desc);
 
