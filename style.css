@@ -260,9 +260,15 @@ thead th {
     /* Ensure bars go edge to edge */
 }
 
+.date-num {
+    position: relative;
+    z-index: 2;
+}
+
 .event-bar-container {
     position: absolute;
     bottom: 0;
+    z-index: 1;
     left: 0;
     right: 0;
     display: flex;

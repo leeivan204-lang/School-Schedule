@@ -375,7 +375,11 @@ document.addEventListener('DOMContentLoaded', () => {
             weekDates.forEach(date => {
                 const dayCell = document.createElement('td');
                 dayCell.className = 'cell-day';
-                dayCell.textContent = date.getUTCDate();
+
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'date-num';
+                dateSpan.textContent = date.getUTCDate();
+                dayCell.appendChild(dateSpan);
 
                 const dayOfWeek = date.getUTCDay();
                 if (dayOfWeek === 0 || dayOfWeek === 6) {
