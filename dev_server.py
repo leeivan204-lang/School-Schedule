@@ -4,7 +4,7 @@ import webbrowser
 import threading
 import time
 
-PORT = 8000
+PORT = 8080
 Handler = http.server.SimpleHTTPRequestHandler
 
 def start_server():
