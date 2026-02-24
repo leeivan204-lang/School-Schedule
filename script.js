@@ -428,10 +428,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Note: If multiple single day events exist, last one wins color? 
                     // Or mix? Usually one major event per day. Let's pick the last one's color.
                     if (singleDayEvents.length > 0) {
-                        // Apply background color of the last single-day event
-                        const lastEvent = singleDayEvents[singleDayEvents.length - 1];
-                        const bgClass = getEventClass(lastEvent.desc);
-                        if (bgClass) {
+                        // Apply background color of the first colored event
+                        const coloredEvent = singleDayEvents.find(e => getEventClass(e.desc) !== '');
+                        if (coloredEvent) {
+                            const bgClass = getEventClass(coloredEvent.desc);
                             dayCell.classList.add(bgClass);
                         }
                         // Also add title tooltip
@@ -546,8 +546,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const div = document.createElement('div');
                 div.className = 'event-block event-holiday';
                 const dateNum = new Date(e.date).getUTCDate();
+                let dateDisplay = `${dateNum}`;
 
-                let content = `<span class="event-date-prefix">${dateNum}</span>${e.desc}`;
+                const eStart = e.date;
+                const eEnd = e.endDate || e.date;
+
+                if (eStart !== eEnd) {
+                    const endDateNum = new Date(eEnd).getUTCDate();
+                    dateDisplay = `${dateNum}-${endDateNum}`;
+                }
+
+                let content = `<span class="event-date-prefix">${dateDisplay}</span>${e.desc}`;
                 if (e.teacherOnly && currentView === 'teacher') {
                     content += ` <span class="teacher-only-mark">(師)</span>`;
                 }
