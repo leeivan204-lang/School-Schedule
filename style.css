@@ -83,6 +83,7 @@ header {
     font-weight: 700;
     border: none;
     border-bottom: 2px solid #ccc;
+    padding-bottom: 4px;
     width: 80px;
     text-align: center;
     font-family: inherit;
@@ -414,10 +415,8 @@ td.event-holiday {
     }
 
     .title-input {
-        border-bottom: none;
         width: auto;
         text-align: center;
-        font-size: 1.1rem;
     }
 
     input[type=number]::-webkit-inner-spin-button,
