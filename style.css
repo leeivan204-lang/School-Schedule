@@ -348,6 +348,10 @@ thead th {
     background-color: var(--holiday-bg);
 }
 
+.event-graduation {
+    background-color: var(--graduation-bg);
+}
+
 .teacher-only-mark {
     font-size: 0.8em;
     color: #ef4444;
