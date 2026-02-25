@@ -537,8 +537,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     dateDisplay = `${dateNum}-${endDateNum}`;
                 }
 
-                let content = `<span class="event-date-prefix">${dateDisplay}</span><span class="event-brief-desc">${e.desc}</span>`;
+                // 強制渲染：日期 + 簡要內容 (不再用額外 span 包裹 e.desc 避免被意外隱藏或蓋掉)
+                let content = `<span class="event-date-prefix">${dateDisplay}</span>${e.desc}`;
 
+                // 附加教師版詳細內容 (換行且無日期，使用 block 元素強迫換排)
                 if (currentView === 'teacher' && e.teacherDesc) {
                     content += `<div class="teacher-detail-text">${e.teacherDesc}</div>`;
                 }
@@ -593,7 +595,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     dateDisplay = `${dateNum}-${endDateNum}`;
                 }
 
-                let content = `<span class="event-date-prefix">${dateDisplay}</span><span class="event-brief-desc">${e.desc}</span>`;
+                // 強制渲染：日期 + 簡要內容
+                let content = `<span class="event-date-prefix">${dateDisplay}</span>${e.desc}`;
+
+                // 附加教師版詳細內容 (換行且無日期，使用 block 元素強迫換排)
                 if (currentView === 'teacher' && e.teacherDesc) {
                     content += `<div class="teacher-detail-text">${e.teacherDesc}</div>`;
                 }
