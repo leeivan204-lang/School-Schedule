@@ -434,12 +434,23 @@ td.event-graduation {
     .title-container {
         margin-bottom: 2px;
         justify-content: center;
+        font-size: 1.1rem;
     }
 
     .title-input {
         width: auto;
         text-align: center;
+        font-size: 1.1rem;
+        border-bottom: 1px solid #000;
+        padding-bottom: 0px;
     }
+
+    .title-icon {
+        font-size: 1.1rem;
+        margin: 0 4px;
+    }
+
+
 
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
