@@ -455,17 +455,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Or mix? Usually one major event per day. Let's pick the last one's color.
                     if (singleDayEvents.length > 0) {
                         // Apply background color of the first colored event
-                        const coloredEvent = singleDayEvents.find(e => getEventClass(getDisplayDesc(e)) !== '');
+                        const coloredEvent = singleDayEvents.find(e => getEventClass(e.desc) !== '');
                         if (coloredEvent) {
-                            const bgClass = getEventClass(getDisplayDesc(coloredEvent));
+                            const bgClass = getEventClass(coloredEvent.desc);
                             dayCell.classList.add(bgClass);
                         }
                         // Also add title tooltip
-                        dayCell.title = singleDayEvents.map(e => getDisplayDesc(e)).join('\n');
+                        dayCell.title = singleDayEvents.map(e => {
+                            let titleStr = e.desc;
+                            if (currentView === 'teacher' && e.teacherDesc) {
+                                titleStr += `\n${e.teacherDesc}`;
+                            }
+                            return titleStr;
+                        }).join('\n\n');
                     }
 
                     // Render bars ONLY for multi-day events with specific colors
-                    const coloredMultiDayEvents = multiDayEvents.filter(e => getEventClass(getDisplayDesc(e)) !== '');
+                    const coloredMultiDayEvents = multiDayEvents.filter(e => getEventClass(e.desc) !== '');
 
                     if (coloredMultiDayEvents.length > 0) {
                         const barContainer = document.createElement('div');
@@ -473,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         coloredMultiDayEvents.forEach(e => {
                             const bar = document.createElement('div');
-                            let cls = 'event-bar ' + getEventClass(getDisplayDesc(e));
+                            let cls = 'event-bar ' + getEventClass(e.desc);
 
                             const eStart = e.date;
                             const eEnd = e.endDate || e.date;
@@ -501,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Filter events: In this week AND NOT a holiday
             const weekEvents = events.filter(e => {
-                const isHoliday = getEventClass(getDisplayDesc(e)) === 'event-holiday';
+                const isHoliday = getEventClass(e.desc) === 'event-holiday';
                 // Filter by view mode
                 if (currentView === 'parent' && e.teacherOnly) return false;
 
@@ -511,9 +517,8 @@ document.addEventListener('DOMContentLoaded', () => {
             weekEvents.sort((a, b) => a.date.localeCompare(b.date));
 
             weekEvents.forEach(e => {
-                const dDesc = getDisplayDesc(e);
                 const div = document.createElement('div');
-                div.className = `event-block ${getEventClass(dDesc)}`;
+                div.className = `event-block ${getEventClass(e.desc)}`;
 
                 const dateNum = new Date(e.date).getUTCDate();
 
@@ -532,7 +537,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     dateDisplay = `${dateNum}-${endDateNum}`;
                 }
 
-                let content = `<span class="event-date-prefix">${dateDisplay}</span>${dDesc}`;
+                let content = `<span class="event-date-prefix">${dateDisplay}</span><span class="event-brief-desc">${e.desc}</span>`;
+
+                if (currentView === 'teacher' && e.teacherDesc) {
+                    content += `<div class="teacher-detail-text">${e.teacherDesc}</div>`;
+                }
+
                 if (e.teacherOnly && currentView === 'teacher') {
                     content += ` <span class="teacher-only-mark">(師)</span>`;
                 }
@@ -563,7 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Filter by view mode (though holidays usually aren't teacher only, but good to be consistent)
                 if (currentView === 'parent' && e.teacherOnly) return false;
 
-                return e.date.startsWith(monthKey) && getEventClass(getDisplayDesc(e)) === 'event-holiday';
+                return e.date.startsWith(monthKey) && getEventClass(e.desc) === 'event-holiday';
             });
 
             // Combine and Render
@@ -583,7 +593,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     dateDisplay = `${dateNum}-${endDateNum}`;
                 }
 
-                let content = `<span class="event-date-prefix">${dateDisplay}</span>${getDisplayDesc(e)}`;
+                let content = `<span class="event-date-prefix">${dateDisplay}</span><span class="event-brief-desc">${e.desc}</span>`;
+                if (currentView === 'teacher' && e.teacherDesc) {
+                    content += `<div class="teacher-detail-text">${e.teacherDesc}</div>`;
+                }
+
                 if (e.teacherOnly && currentView === 'teacher') {
                     content += ` <span class="teacher-only-mark">(師)</span>`;
                 }
