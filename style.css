@@ -13,6 +13,7 @@
     --trip-bg: #93c5fd;
     --bday-bg: #fde047;
     --holiday-bg: #fbcfe8;
+    --graduation-bg: #fdba74;
 }
 
 * {
@@ -372,6 +373,10 @@ td.event-birthday {
 
 td.event-holiday {
     background-color: var(--holiday-bg);
+}
+
+td.event-graduation {
+    background-color: var(--graduation-bg);
 }
 
 @media print {

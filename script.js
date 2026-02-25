@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dateInput = document.getElementById('event-date');
     const endDateInput = document.getElementById('event-end-date');
     const descInput = document.getElementById('event-desc');
+    const teacherDescInput = document.getElementById('event-teacher-desc');
     const teacherOnlyInput = document.getElementById('teacher-only');
     const addBtn = document.getElementById('add-btn');
 
@@ -95,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const dateVal = dateInput.value;
         const endDateVal = endDateInput.value;
         const descVal = descInput.value.trim();
+        const teacherDescVal = teacherDescInput ? teacherDescInput.value.trim() : '';
         const isTeacherOnly = teacherOnlyInput ? teacherOnlyInput.checked : false;
 
         if (!dateVal) {
@@ -120,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             date: dateVal,
             endDate: finalEndDate,
             desc: descVal,
+            teacherDesc: teacherDescVal,
             teacherOnly: isTeacherOnly
         };
 
@@ -128,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Reset inputs
         descInput.value = '';
+        if (teacherDescInput) teacherDescInput.value = '';
         if (endDateInput) endDateInput.value = ''; // Reset end date
         if (teacherOnlyInput) teacherOnlyInput.checked = false;
         dateInput.focus();
@@ -163,8 +167,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // CSV Functions
     function exportCSV() {
-        // Schema: Type,Date_Month,EndDate,Content,TeacherOnly
-        const rows = [['Type', 'Date_Month', 'EndDate', 'Content', 'TeacherOnly']];
+        // Schema: Type,Date_Month,EndDate,Content,TeacherDesc,TeacherOnly
+        const rows = [['Type', 'Date_Month', 'EndDate', 'Content', 'TeacherDesc', 'TeacherOnly']];
 
         // Events
         events.forEach(e => {
@@ -173,6 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.date,
                 e.endDate || e.date,
                 e.desc,
+                e.teacherDesc || '',
                 e.teacherOnly ? 'true' : 'false'
             ]);
         });
@@ -184,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 n.month,
                 '',
                 n.content,
+                '',
                 ''
             ]);
         });
@@ -271,7 +277,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const col1 = fields[1]; // Date or Month
                 const col2 = fields[2]; // EndDate
                 const col3 = fields[3]; // Content
-                const col4 = fields[4]; // TeacherOnly
+                let col4 = fields[4];
+                let col5 = fields[5];
+
+                let teacherDescVal = '';
+                let teacherOnlyVal = false;
+
+                if (fields.length === 5) {
+                    teacherOnlyVal = col4 === 'true';
+                } else if (fields.length >= 6) {
+                    teacherDescVal = col4;
+                    teacherOnlyVal = col5 === 'true';
+                }
 
                 if (type === 'Event') {
                     if (col1 && col3) {
@@ -280,7 +297,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             date: col1,
                             endDate: col2 || col1,
                             desc: col3,
-                            teacherOnly: col4 === 'true'
+                            teacherDesc: teacherDescVal,
+                            teacherOnly: teacherOnlyVal
                         });
                     }
                 } else if (type === 'Note') {
@@ -306,10 +324,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper: Get color class
     function getEventClass(desc) {
+        if (!desc) return '';
         if (desc.includes('段考')) return 'event-exam';
         if (desc.includes('校外教學')) return 'event-trip';
         if (desc.includes('慶生會') || desc.includes('同樂會') || desc.includes('歡送會')) return 'event-birthday';
         if (desc.includes('節日') || desc.includes('補假') || desc.includes('放假')) return 'event-holiday';
+        if (desc.includes('畢業典禮')) return 'event-graduation';
         return '';
     }
 
@@ -330,6 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
         scheduleBody.innerHTML = '';
 
         if (!semesterStart) return;
+
+        const getDisplayDesc = (e) => (currentView === 'teacher' && e.teacherDesc) ? e.teacherDesc : e.desc;
 
         // Use UTC to avoid timezone issues with YYYY-MM-DD strings
         const startDate = new Date(semesterStart);
@@ -433,17 +455,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Or mix? Usually one major event per day. Let's pick the last one's color.
                     if (singleDayEvents.length > 0) {
                         // Apply background color of the first colored event
-                        const coloredEvent = singleDayEvents.find(e => getEventClass(e.desc) !== '');
+                        const coloredEvent = singleDayEvents.find(e => getEventClass(getDisplayDesc(e)) !== '');
                         if (coloredEvent) {
-                            const bgClass = getEventClass(coloredEvent.desc);
+                            const bgClass = getEventClass(getDisplayDesc(coloredEvent));
                             dayCell.classList.add(bgClass);
                         }
                         // Also add title tooltip
-                        dayCell.title = singleDayEvents.map(e => e.desc).join('\n');
+                        dayCell.title = singleDayEvents.map(e => getDisplayDesc(e)).join('\n');
                     }
 
                     // Render bars ONLY for multi-day events with specific colors
-                    const coloredMultiDayEvents = multiDayEvents.filter(e => getEventClass(e.desc) !== '');
+                    const coloredMultiDayEvents = multiDayEvents.filter(e => getEventClass(getDisplayDesc(e)) !== '');
 
                     if (coloredMultiDayEvents.length > 0) {
                         const barContainer = document.createElement('div');
@@ -451,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         coloredMultiDayEvents.forEach(e => {
                             const bar = document.createElement('div');
-                            let cls = 'event-bar ' + getEventClass(e.desc);
+                            let cls = 'event-bar ' + getEventClass(getDisplayDesc(e));
 
                             const eStart = e.date;
                             const eEnd = e.endDate || e.date;
@@ -479,7 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Filter events: In this week AND NOT a holiday
             const weekEvents = events.filter(e => {
-                const isHoliday = getEventClass(e.desc) === 'event-holiday';
+                const isHoliday = getEventClass(getDisplayDesc(e)) === 'event-holiday';
                 // Filter by view mode
                 if (currentView === 'parent' && e.teacherOnly) return false;
 
@@ -489,8 +511,9 @@ document.addEventListener('DOMContentLoaded', () => {
             weekEvents.sort((a, b) => a.date.localeCompare(b.date));
 
             weekEvents.forEach(e => {
+                const dDesc = getDisplayDesc(e);
                 const div = document.createElement('div');
-                div.className = `event-block ${getEventClass(e.desc)}`;
+                div.className = `event-block ${getEventClass(dDesc)}`;
 
                 const dateNum = new Date(e.date).getUTCDate();
 
@@ -509,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     dateDisplay = `${dateNum}-${endDateNum}`;
                 }
 
-                let content = `<span class="event-date-prefix">${dateDisplay}</span>${e.desc}`;
+                let content = `<span class="event-date-prefix">${dateDisplay}</span>${dDesc}`;
                 if (e.teacherOnly && currentView === 'teacher') {
                     content += ` <span class="teacher-only-mark">(師)</span>`;
                 }
@@ -540,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Filter by view mode (though holidays usually aren't teacher only, but good to be consistent)
                 if (currentView === 'parent' && e.teacherOnly) return false;
 
-                return e.date.startsWith(monthKey) && getEventClass(e.desc) === 'event-holiday';
+                return e.date.startsWith(monthKey) && getEventClass(getDisplayDesc(e)) === 'event-holiday';
             });
 
             // Combine and Render
@@ -560,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     dateDisplay = `${dateNum}-${endDateNum}`;
                 }
 
-                let content = `<span class="event-date-prefix">${dateDisplay}</span>${e.desc}`;
+                let content = `<span class="event-date-prefix">${dateDisplay}</span>${getDisplayDesc(e)}`;
                 if (e.teacherOnly && currentView === 'teacher') {
                     content += ` <span class="teacher-only-mark">(師)</span>`;
                 }
